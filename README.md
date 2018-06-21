@@ -5,7 +5,7 @@ Module containing basic functions for a discord music bot written in Node.js usi
 To initialize : 
 `var musicbot = new Musicbot(mongo connection string, discord.js client, youtube api key);`
 
-Available functions (vc argument - discord.js voice channel object) : 
+Available functions (vc - discord.js voice channel object) : 
 - **join(vc)** - Joins a voice channel.
 - **leave(vc)** - Leaves a voice channel.
 - **play(vc, argv, owner)** - Plays or queues a song.
