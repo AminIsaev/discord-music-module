@@ -690,8 +690,7 @@ class DB {
     return new Promise(async (resolve, reject) => {
       try {
         let client = await MongoClient.connect(this.mongoConnection);
-        const db = client.db('homobot');
-  
+        const db = client.db(this.mongoConnection.split('/')[this.mongoConnection.split('/').length - 1]);
         voice = await db.collection('voice').findOne();
         delete voice['_id'];
         return resolve(true);
@@ -705,7 +704,7 @@ class DB {
   async updateDB() {
     try {
       let client = await MongoClient.connect(this.mongoConnection);
-      const db = client.db('homobot');
+      const db = client.db(this.mongoConnection.split('/')[this.mongoConnection.split('/').length - 1]);
       await db.collection('voice').replaceOne({}, voice);
     } catch (e) {
       console.dir(e);
