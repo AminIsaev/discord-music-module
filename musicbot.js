@@ -59,24 +59,10 @@ class Musicbot {
       voiceDispatchers[cid] = voiceConnections[cid].playStream(stream, {seek: seek});
       voice[cid].seek = seek;
   
-      const np = voice[cid].playlist[voice[cid].currentSong];
-      this.bot.user.setPresence({
-        game: {
-          name: np === undefined ? 'ðŸŽµ Music' : `ðŸŽµ ${np.title}`,
-          type: 0
-        }
-      });
-  
       voiceDispatchers[cid].on('end', async (e) => {
         voiceDispatchers[cid] = false;
         switch (e) {
           case 'stop':
-          this.bot.user.setPresence({
-              game: {
-                name: 'â¹ï¸ Stopped',
-                type: 0
-              }
-            });
             voice[cid].currentSong = 0;
             this.db.updateDB();
             break;
@@ -298,13 +284,6 @@ class Musicbot {
         } else {
           if ( vc.id in voiceDispatchers && voiceDispatchers[vc.id] && voiceDispatchers[vc.id].paused ) {
             voiceDispatchers[vc.id].resume();
-            const np = voice[vc.id].playlist[voice[vc.id].currentSong];
-            this.bot.user.setPresence({
-              game: {
-                name: np === undefined ? 'ðŸŽµ Music' : `ðŸŽµ ${np.title}`,
-                type: 0
-              }
-            });
             message = "Resumed.";
           } else if ( vc.id in voice && !voiceDispatchers[vc.id] && voice[vc.id].playlist.length != 0 ) {
             if ( !voiceConnections[vc.id] ) {
@@ -384,12 +363,6 @@ class Musicbot {
       if (voiceDispatchers[vc.id].paused) return {success: false, message: "Already paused."};
   
       voiceDispatchers[vc.id].pause();
-      this.bot.user.setPresence({
-        game: {
-          name: 'â¸ï¸ Paused',
-          type: 0
-        }
-      });
       return {success: true, message: "Paused."};
     }
     // descprition - resumes playback
@@ -400,13 +373,6 @@ class Musicbot {
       if (!voiceDispatchers[vc.id].paused) return {success: false, message: "Already playing."};
   
       voiceDispatchers[vc.id].resume();
-      const np = voice[vc.id].playlist[voice[vc.id].currentSong];
-      this.bot.user.setPresence({
-        game: {
-          name: np === undefined ? 'ðŸŽµ Music' : `ðŸŽµ ${np.title}`,
-          type: 0
-        }
-      });
       return {success: false, message: "Resumed."};
     }
     // description - stops playback
@@ -416,12 +382,6 @@ class Musicbot {
       if (!voiceDispatchers[vc.id]) return {success: false, message: "Nothing playing."};
   
       voiceDispatchers[vc.id].end('stop');
-      this.bot.user.setPresence({
-        game: {
-          name: 'â¹ï¸ Stopped',
-          type: 0
-        }
-      });
       return {success: true, message: "Stopped."};
     }
     // description - moves one song forward
